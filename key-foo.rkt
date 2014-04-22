@@ -23,25 +23,27 @@
 ; (filter pred lst) remove if pred true
 
 (define (filter-key pred lst key)
-  (foldl-key (lambda (item accum)
-               (if (pred item)
-                   (cons item accum)
-                   accum))
-             '()
-             (reverse lst)
-             key))
+  (foldl(lambda (item accum)
+          (if (pred (key item))
+              (cons item accum)
+              accum))
+        '()
+        (reverse lst)))
 
 (let ([lst (map range (range 10))])
   (test-equal? "filter-key"
-               (filter-key (curry > 5)
-                           lst
-                           length)
-               (filter (compose (curry > 5) length)
-                       lst)))
+               (filter-key (curry > 5) lst length)
+               (filter (compose (curry > 5) length) lst)))
 
 ; (filter-not pred lst) remove if pred false
 
-; (filter-map proc lst ...+) map and then filters out all #f
+(define (filter-not-key pred lst key)
+  (filter-key (negate pred) lst key))
+
+(let ([lst (map range (range 10))])
+  (test-equal? "filter-not-key"
+               (filter-not-key (curry > 5) lst length)
+               (filter-not (compose (curry > 5) length) lst)))
 
 ; (partition pred lst) same as (values (filter pred lst) (filter (negate pred) lst))
 
