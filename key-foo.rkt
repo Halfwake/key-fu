@@ -4,13 +4,13 @@
 
 ; (foldl proc init lst)
 
-(define (foldl-key proc init key lst)
+(define (foldl-key proc init key . lists)
   (let iter ([accum init]
-             [lst lst])
-    (cond [(null? lst) accum]
-          [else (iter (proc (key (first lst))
-                            accum)
-                      (rest lst))])))
+             [lists lists])
+    (cond [(ormap null? lists) accum]
+          [else (iter (apply proc (append (map (compose key first) lists)
+                                          (list accum)))
+                      (map rest lists))])))
 
 (let ([lst (map range (range 10))])
   (test-equal? "foldl-key"
@@ -18,6 +18,13 @@
                (foldl (lambda (item accum)
                         (+ accum (length item)))
                       0
+                      lst))
+  (test-equal? "foldl-key multiple lists"
+               (foldl-key + 0 length lst lst)
+               (foldl (lambda (a b accum)
+                        (+ accum (length a) (length b)))
+                      0
+                      lst
                       lst)))
 
 ; (filter pred lst) remove if pred true
