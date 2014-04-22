@@ -4,7 +4,7 @@
 
 ; (foldl proc init lst)
 
-(define (foldl-key proc init lst key)
+(define (foldl-key proc init key lst)
   (let iter ([accum init]
              [lst lst])
     (cond [(null? lst) accum]
@@ -14,7 +14,7 @@
 
 (let ([lst (map range (range 10))])
   (test-equal? "foldl-key"
-               (foldl-key + 0 lst length)
+               (foldl-key + 0 length lst)
                (foldl (lambda (item accum)
                         (+ accum (length item)))
                       0
@@ -22,27 +22,27 @@
 
 ; (filter pred lst) remove if pred true
 
-(define (filter-key pred lst key)
-  (foldl(lambda (item accum)
-          (if (pred (key item))
-              (cons item accum)
-              accum))
-        '()
-        (reverse lst)))
+(define (filter-key pred key lst)
+  (foldl (lambda (item accum)
+           (if (pred (key item))
+               (cons item accum)
+               accum))
+         '()
+         (reverse lst)))
 
 (let ([lst (map range (range 10))])
   (test-equal? "filter-key"
-               (filter-key (curry > 5) lst length)
+               (filter-key (curry > 5) length lst)
                (filter (compose (curry > 5) length) lst)))
 
 ; (filter-not pred lst) remove if pred false
 
-(define (filter-not-key pred lst key)
-  (filter-key (negate pred) lst key))
+(define (filter-not-key pred key lst)
+  (filter-key (negate pred) key lst))
 
 (let ([lst (map range (range 10))])
   (test-equal? "filter-not-key"
-               (filter-not-key (curry > 5) lst length)
+               (filter-not-key (curry > 5) length lst)
                (filter-not (compose (curry > 5) length) lst)))
 
 ; (partition pred lst) same as (values (filter pred lst) (filter (negate pred) lst))
