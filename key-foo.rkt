@@ -30,12 +30,12 @@
 ; (filter pred lst) remove if pred true
 
 (define (filter-key pred key lst)
-  (foldl (lambda (item accum)
+  (foldr (lambda (item accum)
            (if (pred (key item))
                (cons item accum)
                accum))
          '()
-         (reverse lst)))
+         lst))
 
 (let ([lst (map range (range 10))])
   (test-equal? "filter-key"
@@ -78,8 +78,6 @@
                
 
 ; (count proc lst ...+) same as (length (filter proc lst ...))
-    
-             
 
 ; (foldr proc init lst)
 
