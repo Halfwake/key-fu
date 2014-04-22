@@ -54,6 +54,29 @@
 
 ; (partition pred lst) same as (values (filter pred lst) (filter (negate pred) lst))
 
+(define (partition-key pred key lst)
+  (match-define (list true-list false-list)
+    (foldr (lambda (item accum)
+             (match-define (list true-list false-list) accum)
+             (if (pred (key item))
+                 (list (cons item true-list)
+                       false-list)
+                 (list true-list
+                       (cons item false-list))))
+           '(() ())
+           lst))
+  (values true-list false-list))
+
+(let ([lst (map range (range 10))])
+  (test-equal? "partition-key"
+               (call-with-values (lambda ()
+                                   (partition-key (curry > 5) length lst))
+                                 list)
+               (call-with-values (lambda ()
+                                   (partition (compose (curry > 5) length) lst))
+                                 list)))
+               
+
 ; (count proc lst ...+) same as (length (filter proc lst ...))
     
              
