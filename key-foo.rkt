@@ -79,6 +79,19 @@
 
 ; (count proc lst ...+) same as (length (filter proc lst ...))
 
+(define (count-key proc key . lists)
+  (define all-items (map key (apply append lists)))
+  (length (filter proc all-items)))
+
+(let ([lst (append (map range (range 6))
+                   (map range (range 8))
+                   (map range (range 10)))])
+  (test-equal? "count-key"
+               (count-key (curry = 7) length lst)
+               (count (lambda (item)
+                        (= 7 (length item)))
+                      lst)))
+
 ; (foldr proc init lst)
 
 ; (remove v lst [proc]) remove if equal to v with [proc] equality
