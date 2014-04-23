@@ -9,7 +9,8 @@
          partition/key
          count/key
          remove*/key
-         remove/key)
+         remove/key
+         sort/key)
 
 (define (foldl/key proc init key . lists)
   (let iter ([accum init]
@@ -63,3 +64,6 @@
 
 (define (remove/key v proc key lst)
   (remove*/key (list v) proc key lst))
+
+(define (sort/key lst less-than? key)
+  (sort lst less-than? #:key key))

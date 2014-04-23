@@ -102,3 +102,9 @@
                (remove/key 5 = length lst)
                (remove 5 lst (lambda (a b)
                                (= a (length b))))))
+
+(let ([lst (shuffle (map range (range 10)))])
+  (test-equal? "sort/key"
+               (sort/key lst < length)
+               (sort lst < #:key length)))
+               
