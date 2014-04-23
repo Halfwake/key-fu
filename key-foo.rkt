@@ -27,6 +27,33 @@
                       lst
                       lst)))
 
+; (foldr proc init lst)
+
+(define (foldr-key proc init key . lists)
+  (apply foldl-key (append (list (lambda (arg . rest)
+                                   (define args (cons arg rest))
+                                   (apply proc (reverse args)))
+                                 init
+                                 key)
+                           (map reverse lists))))
+         
+               
+
+(let [(lst (map range (range 10)))]
+  (test-equal? "foldr-key"
+               (foldr-key + 0 length lst)
+               (foldr (lambda (item accum)
+                        (+ (length item) accum))
+                      0
+                      lst))
+  (test-equal? "foldr-key multiple lists"
+               (foldr-key + 0 length lst lst)
+               (foldr (lambda (a b accum)
+                        (+ (length a) (length b) accum))
+                      0
+                      lst
+                      lst)))
+
 ; (filter pred lst) remove if pred true
 
 (define (filter-key pred key lst)
@@ -91,8 +118,6 @@
                (count (lambda (item)
                         (= 7 (length item)))
                       lst)))
-
-; (foldr proc init lst)
 
 ; (remove* v-lst lst [proc]) removes every element in v-lst from lst using [proc] to check equality)
 
