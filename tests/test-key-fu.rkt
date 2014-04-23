@@ -1,7 +1,7 @@
 #lang racket
 
 (require rackunit
-         "../key-foo.rkt")
+         "../key-fu.rkt")
 
 (let ([lst (map range (range 10))])
   (test-equal? "foldl/key"
