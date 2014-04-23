@@ -94,8 +94,6 @@
 
 ; (foldr proc init lst)
 
-; (remove v lst [proc]) remove if equal to v with [proc] equality
-
 ; (remove* v-lst lst [proc]) removes every element in v-lst from lst using [proc] to check equality)
 
 (define (remove*-key v-lst proc key lst)
@@ -109,3 +107,14 @@
                (remove*-key '(3 4 5) = length lst)
                (remove* '(3 4 5) lst (lambda (a b)
                                        (= a (length b))))))
+
+; (remove v lst [proc]) remove if equal to v with [proc] equality
+
+(define (remove-key v proc key lst)
+  (remove*-key (list v) proc key lst))
+
+(let ([lst (map range (range 10))])
+  (test-equal? "remove-key"
+               (remove-key 5 = length lst)
+               (remove 5 lst (lambda (a b)
+                               (= a (length b))))))
