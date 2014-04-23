@@ -97,3 +97,15 @@
 ; (remove v lst [proc]) remove if equal to v with [proc] equality
 
 ; (remove* v-lst lst [proc]) removes every element in v-lst from lst using [proc] to check equality)
+
+(define (remove*-key v-lst proc key lst)
+  (filter-key (lambda (item)
+                (not (member item v-lst proc)))
+              key
+              lst))
+
+(let ([lst (append (map range (range 10)))])
+  (test-equal? "remove*-key"
+               (remove*-key '(3 4 5) = length lst)
+               (remove* '(3 4 5) lst (lambda (a b)
+                                       (= a (length b))))))
