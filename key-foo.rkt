@@ -2,16 +2,16 @@
 
 (require rackunit)
 
-(provide foldl-key
-         foldr-key
-         filter-key
-         filter-not-key
-         partition-key
-         count-key
-         remove*-key
-         remove-key)
+(provide foldl/key
+         foldr/key
+         filter/key
+         filter-not/key
+         partition/key
+         count/key
+         remove*/key
+         remove/key)
 
-(define (foldl-key proc init key . lists)
+(define (foldl/key proc init key . lists)
   (let iter ([accum init]
              [lists lists])
     (cond [(ormap null? lists) accum]
@@ -19,15 +19,15 @@
                                           (list accum)))
                       (map rest lists))])))
 
-(define (foldr-key proc init key . lists)
-  (apply foldl-key (append (list (lambda (arg . rest)
+(define (foldr/key proc init key . lists)
+  (apply foldl/key (append (list (lambda (arg . rest)
                                    (define args (cons arg rest))
                                    (apply proc (reverse args)))
                                  init
                                  key)
                            (map reverse lists))))
 
-(define (filter-key pred key lst)
+(define (filter/key pred key lst)
   (foldr (lambda (item accum)
            (if (pred (key item))
                (cons item accum)
@@ -35,10 +35,10 @@
          '()
          lst))
 
-(define (filter-not-key pred key lst)
-  (filter-key (negate pred) key lst))
+(define (filter-not/key pred key lst)
+  (filter/key (negate pred) key lst))
 
-(define (partition-key pred key lst)
+(define (partition/key pred key lst)
   (match-define (list true-list false-list)
     (foldr (lambda (item accum)
              (match-define (list true-list false-list) accum)
@@ -51,15 +51,15 @@
            lst))
   (values true-list false-list))
 
-(define (count-key proc key . lists)
+(define (count/key proc key . lists)
   (define all-items (map key (apply append lists)))
   (length (filter proc all-items)))
 
-(define (remove*-key v-lst proc key lst)
-  (filter-key (lambda (item)
+(define (remove*/key v-lst proc key lst)
+  (filter/key (lambda (item)
                 (not (member item v-lst proc)))
               key
               lst))
 
-(define (remove-key v proc key lst)
-  (remove*-key (list v) proc key lst))
+(define (remove/key v proc key lst)
+  (remove*/key (list v) proc key lst))
