@@ -25,6 +25,19 @@
                         (+ accum (length a) (length b)))
                       0
                       lst
+                      lst))
+  (test-equal? "foldl-key non-associative"
+               (foldl-key - 0 length lst)
+               (foldl (lambda (item accum)
+                        (- (length item) accum))
+                      0
+                      lst))
+  (test-equal? "foldl-key non-associative multiple lists"
+               (foldl-key - 0 length lst lst)
+               (foldl (lambda (a b accum)
+                        (- (length a) (length b) accum))
+                      0
+                      lst
                       lst)))
 
 ; (foldr proc init lst)
@@ -50,6 +63,19 @@
                (foldr-key + 0 length lst lst)
                (foldr (lambda (a b accum)
                         (+ (length a) (length b) accum))
+                      0
+                      lst
+                      lst))
+  (test-equal? "foldr-key non-associative"
+               (foldr-key - 0 length lst)
+               (foldr (lambda (item accum)
+                        (- accum (length item) ))
+                      0
+                      lst))
+  (test-equal? "foldr-key non-associative multiple lists"
+               (foldr-key - 0 length lst lst)
+               (foldr (lambda (a b accum)
+                        (- accum (length a) (length b)))
                       0
                       lst
                       lst)))
