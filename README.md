@@ -44,7 +44,8 @@ Key functions are best used when something has to be done to a collection of obj
   ;; Pretty.
   (sort/key stuff < length)
 
-  ;; The standard library already handles this one and includes keyword options to tune efficiency, but it's a keyword argument and that might not be convenient.
+  ;; The standard library already handles this one and includes keyword options to tune 
+  ;; efficiency, but it's a keyword argument and that might not be convenient.
   (sort stuff < #:key length)
 ```
 
