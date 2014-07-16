@@ -99,8 +99,10 @@ And one couldn't care less.
 
 And this function can be used to replace everything in this library.
 
+```racket
 (define (on compare transform)
   (lambda (a b)
     (compare (transform a)
              (transform b))))
+```
 
