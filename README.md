@@ -97,3 +97,10 @@ And one couldn't care less.
   (map/key identity add1  (range 10))
 ```
 
+And this function can be used to replace everything in this library.
+
+(define (on compare transform)
+  (lambda (a b)
+    (compare (transform a)
+             (transform b))))
+
